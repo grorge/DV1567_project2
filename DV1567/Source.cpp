@@ -8,12 +8,9 @@
 int main()
 {
 	Profiler prof;
-	int test1 = prof.startTest();
 
 	std::cout << "Hello World!\n";
-
-
-
+	
 	int v[DataSetSize];
 	//you can alternatively dynamically allocate the vector
 	for (int i = 0; i < DataSetSize; i++)
@@ -22,44 +19,60 @@ int main()
 		std::cout << i << std::endl;
 	}
 
-
-	int ds[DataSetSize];
-
-	//// load the dateset in the memory area addressed by ds
-	//loadDataset(ds, DataSetSize);
-	//// compute the average value of the dataset, i.e. sum_of_dataset_values / num_of_dataset_values
-	float avg = average(v);
-	//	// find the max value in the dataset
-	int max = maxvalue(v);
-	//	// find the min value in the dataset
-	int min = minvalue(v);
-	//	//sort the dataset and copy it into the memory area pointed by sds
-
-	sortDataset(v);
-
-	//insertionSort(v, DataSetSize);
-	////write the sorted array into a new file plus the valies of the average, min and max as the first three records.
-	writeDataset(v, OutputFilename, DataSetSize, avg, min, max);
+	writeDataset(v, DatasetFilename, DataSetSize, DataSetSize, 0, 0, 0);
 
 
-	prof.stopTest(test1);
+	int dataSize = DataSetSize / 4;
+
+	for (int i = 1; i <= 4; i++)
+	{
+		int t0 = prof.startTest();
+
+		mainFunc(dataSize * i, BufferSize /*DataSetSize/8*/);
+
+		prof.stopTest(t0);
+	}
+
 
 	return 0;
 }
 
+int mainFunc(int size, int buffSize)
+{
+	int v[DataSetSize];
+
+	//// load the dateset in the memory area addressed by ds
+	loadDataset(v, size);
+	//// compute the average value of the dataset, i.e. sum_of_dataset_values / num_of_dataset_values
+	float avg = average(v, size);
+	//	// find the max value in the dataset
+	int max = maxvalue(v, size);
+	//	// find the min value in the dataset
+	int min = minvalue(v, size);
+	//	//sort the dataset and copy it into the memory area pointed by sds
+
+	sortDataset(v, size, buffSize);
+	//insertionSort(v, DataSetSize);
+	////write the sorted array into a new file plus the valies of the average, min and max as the first three records.
+	writeDataset(v, OutputFilename, DataSetSize, buffSize, avg, min, max);
+
+
+	return 1;
+}
 
 //this code is an example of how to read a file in C
 int loadDataset(int ds[], int size)
 {
 	std::ifstream fp;
-	std::string v[BufferSize];
+	std::string v[DataSetSize];
 	//fopen_s(&fp, DatasetFilename, "r");
 	fp.open(DatasetFilename, std::ios::out);
 
 	if (fp.is_open())
 	{
 		bool filling = true;
-		for (int i = 1; i <= size && filling; i++)
+		int i;
+		for (i = 0; i < size && filling; i++)
 		{
 
 			if (std::getline(fp, v[i]))
@@ -81,29 +94,30 @@ void swap(int *xp, int *yp)
 	*xp = *yp;
 	*yp = temp;
 }
-void sortDataset(int arr[])
+void sortDataset(int arr[], int n, int m)
 {
-	int partionDS[BufferSize];
-	int itterations = DataSetSize / BufferSize;
+	int *partionDS = new int[m];
+	int itterations = n / m;
 
 	for (int j = 0; j < itterations; j++)
 	{
-		for (int i = 0; i <= BufferSize; i++)
+		for (int i = 0; i < m; i++)
 		{
-			partionDS[i] = arr[i + (j*BufferSize)];
+			partionDS[i] = arr[i + (j*m)];
 		}
 
-		insertionSort(partionDS, BufferSize);
+		insertionSort(partionDS, m);
 
-		for (int i = 0; i <= BufferSize; i++)
+		for (int i = 0; i < m; i++)
 		{
-			arr[i + (j*BufferSize)] = partionDS[i];
+			arr[i + (j*m)] = partionDS[i];
 		}
 	}
 
 
-	insertionSort(arr, DataSetSize);
+	insertionSort(arr, n);
 
+	//delete partionDS;
 }
 void selectionSort(int arr[], int n)
 {
@@ -139,21 +153,23 @@ void insertionSort(int arr[], int n)
 }
 
 
-int writeDataset(int ds[], const char *filename, int Buffersize, float avg, int min, int max)
+int writeDataset(int ds[], const char *filename, int n, int Buffersize, float avg, int min, int max)
 {
 	std::ofstream fp;
-	std::string v[BufferSize];
 
-	fp.open(OutputFilename, std::ios::out);
 
-	int itterations = DataSetSize / BufferSize;
+	fp.open(filename, std::ios::out);
+
+	int itterations = n / Buffersize;
 
 	for (int j = 0; j < itterations; j++)
 	{
-		for (int i = 0; i < BufferSize; i++)
+		int i;
+		for (i = 0; i < Buffersize; i++)
 			{
-				fp << ds[i+(j*BufferSize)] << std::endl;
+				fp << ds[i+(j*Buffersize)] << std::endl;
 			}
+		//int k = 1322;
 	}
 
 	fp << Buffersize << std::endl;
@@ -162,6 +178,8 @@ int writeDataset(int ds[], const char *filename, int Buffersize, float avg, int 
 	fp << max;
 	// TIP you can define you own buffer, buffer size and you can write blocks of data of size > 1
 	fp.close();
+
+
 	return 0;
 }
 
@@ -172,24 +190,24 @@ float generateRand(int rmax) {
 }
 
 
-float average(int dataset[])
+float average(int dataset[], int n)
 {
 	float avg = 0.0f;
 
-	for (int i = 0; i < DataSetSize; i++)
+	for (int i = 0; i < n; i++)
 	{
 		avg += dataset[i];
 	}
 
-	avg /= DataSetSize;
+	avg /= n;
 
 	return avg;
 }
-int maxvalue(int dataset[])
+int maxvalue(int dataset[], int n)
 {
 	int max = dataset[0];
 
-	for (int i = 0; i < DataSetSize; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (dataset[i] > max)
 		{
@@ -199,11 +217,11 @@ int maxvalue(int dataset[])
 
 	return max;
 }
-int minvalue(int dataset[])
+int minvalue(int dataset[], int n)
 {
 	int min = dataset[0];
 
-	for (int i = 0; i < DataSetSize; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (dataset[i] < min)
 		{

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DataSetSize 4096
+#define DataSetSize 16384
 #define DatasetFilename "filename.txt"
 #define OutputFilename "results.txt"
 #define ProfilerFilename "profilerData.txt"
@@ -22,20 +22,22 @@ struct test
 	test() : startTime(0) {};
 };
 
+int mainFunc(int size, int buffSize);
+
 int loadDataset(int ds[], int size);
 void swap(int *xp, int *yp);
-void sortDataset(int arr[]);
+void sortDataset(int arr[], int n, int m);
 void selectionSort(int arr[], int n);
 void insertionSort(int arr[], int n);
 
-int writeDataset(int ds[], const char *filename, int Buffersize, float avg, int min, int max);
+int writeDataset(int ds[], const char *filename, int n, int Buffersize, float avg, int min, int max);
 
 float generateRand(int rmax);
 
 
-float average(int dataset[]);
-int maxvalue(int dataset[]);
-int minvalue(int dataset[]);
+float average(int dataset[], int n);
+int maxvalue(int dataset[], int n);
+int minvalue(int dataset[], int n);
 
 
 class Profiler
@@ -56,7 +58,7 @@ private:
 
 Profiler::Profiler()
 {
-	this->tests = new test[4];
+	this->tests = new test[12];
 	this->nrOf = 0;
 
 	proFile.open(ProfilerFilename, std::ios::out);

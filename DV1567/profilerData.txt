@@ -1,2 +1,8 @@
 Test number: 0
-Runtime: 3193msec
+Runtime: 220msec
+Test number: 1
+Runtime: 248msec
+Test number: 2
+Runtime: 318msec
+Test number: 3
+Runtime: 400msec
