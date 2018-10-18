@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="filename.txt" />
+    <Text Include="profilerData.txt" />
     <Text Include="results.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

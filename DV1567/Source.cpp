@@ -1,35 +1,18 @@
 #include "Header.h"
 
 
-#include <iostream>
-#include <fstream>
-#include <string>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 
 //this code is an example of how to read a file in C
-int loadDataset(int ds[], int size);
-void swap(int *xp, int *yp);
-void sortDataset(int arr[]);
-void selectionSort(int arr[], int n);
-void insertionSort(int arr[], int n);
-
-int writeDataset(int ds[], const char *filename, int Buffersize, float avg, int min, int max);
-
-float generateRand(int rmax);
-
-
-float average(int dataset[]);
-int maxvalue(int dataset[]);
-int minvalue(int dataset[]);
 
 
 int main()
 {
+	Profiler prof;
+	int test1 = prof.startTest();
+
 	std::cout << "Hello World!\n";
+
+
 
 	int v[DataSetSize];
 	//you can alternatively dynamically allocate the vector
@@ -58,6 +41,8 @@ int main()
 	////write the sorted array into a new file plus the valies of the average, min and max as the first three records.
 	writeDataset(v, OutputFilename, DataSetSize, avg, min, max);
 
+
+	prof.stopTest(test1);
 
 	return 0;
 }

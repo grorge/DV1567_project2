@@ -31,5 +31,8 @@
     <Text Include="results.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="profilerData.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
