@@ -19,7 +19,7 @@ int main()
 	for (int i = 0; i < DataSetSize; i++)
 	{
 		v[i] = generateRand(100);
-		std::cout << i << std::endl;
+		//std::cout << i << std::endl;
 	}
 
 	writeDataset(v, DatasetFilename, DataSetSize, DataSetSize, 0, 0, 0, 1);
@@ -82,7 +82,7 @@ int mainFunc(Profiler *prof, int size, int buffSize, int sort)
 	////write the sorted array into a new file plus the valies of the average, min and max as the first three records.
 
 	int twrite = prof->startTest();
-	writeDataset(v, OutputFilename, DataSetSize, buffSize, avg, min, max, sort);
+	writeDataset(v, OutputFilename, size, buffSize, avg, min, max, sort);
 	prof->stopTest(twrite);
 
 	return 1;

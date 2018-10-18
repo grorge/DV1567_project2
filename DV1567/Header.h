@@ -9,12 +9,12 @@
 #include <time.h>
 
 //#define DataSetSize 4096
-#define DataSetSize 16384
-//#define DataSetSize 131072
+//#define DataSetSize 16384
+#define DataSetSize 131072
 #define DatasetFilename "filename.txt"
 #define OutputFilename "results.txt"
 #define ProfilerFilename "profilerData.txt"
-#define BufferSize 512
+#define BufferSize 4096
 
 class Profiler;
 
