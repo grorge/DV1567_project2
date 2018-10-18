@@ -1,8 +1,32 @@
-Test number: 0
-Runtime: 220msec
 Test number: 1
-Runtime: 248msec
+Runtime: 23msec
 Test number: 2
-Runtime: 318msec
+Runtime: 11msec
 Test number: 3
-Runtime: 400msec
+Runtime: 175msec
+Test number: 0
+Runtime: 209msec
+Test number: 5
+Runtime: 30msec
+Test number: 6
+Runtime: 43msec
+Test number: 7
+Runtime: 173msec
+Test number: 4
+Runtime: 248msec
+Test number: 9
+Runtime: 38msec
+Test number: 10
+Runtime: 103msec
+Test number: 11
+Runtime: 150msec
+Test number: 8
+Runtime: 291msec
+Test number: 13
+Runtime: 48msec
+Test number: 14
+Runtime: 189msec
+Test number: 15
+Runtime: 191msec
+Test number: 12
+Runtime: 428msec

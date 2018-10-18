@@ -8,12 +8,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+//#define DataSetSize 4096
 #define DataSetSize 16384
+//#define DataSetSize 131072
 #define DatasetFilename "filename.txt"
 #define OutputFilename "results.txt"
 #define ProfilerFilename "profilerData.txt"
 #define BufferSize 512
 
+class Profiler;
 
 struct test
 {
@@ -22,7 +25,7 @@ struct test
 	test() : startTime(0) {};
 };
 
-int mainFunc(int size, int buffSize);
+int mainFunc(Profiler *prof, int size, int buffSize);
 
 int loadDataset(int ds[], int size);
 void swap(int *xp, int *yp);
@@ -58,7 +61,7 @@ private:
 
 Profiler::Profiler()
 {
-	this->tests = new test[12];
+	this->tests = new test[64];
 	this->nrOf = 0;
 
 	proFile.open(ProfilerFilename, std::ios::out);

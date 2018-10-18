@@ -7,7 +7,7 @@
 
 int main()
 {
-	Profiler prof;
+	Profiler *prof = new Profiler();
 
 	std::cout << "Hello World!\n";
 	
@@ -26,23 +26,29 @@ int main()
 
 	for (int i = 1; i <= 4; i++)
 	{
-		int t0 = prof.startTest();
+		int t0 = prof->startTest();
 
-		mainFunc(dataSize * i, BufferSize /*DataSetSize/8*/);
+		mainFunc(prof, dataSize * i, BufferSize /*DataSetSize/8*/);
 
-		prof.stopTest(t0);
+		prof->stopTest(t0);
 	}
 
+	delete prof;
 
 	return 0;
 }
 
-int mainFunc(int size, int buffSize)
+int mainFunc(Profiler *prof, int size, int buffSize)
 {
-	int v[DataSetSize];
+	int *v = new int[DataSetSize];
+
+	int tload = prof->startTest();
 
 	//// load the dateset in the memory area addressed by ds
 	loadDataset(v, size);
+
+	prof->stopTest(tload);
+
 	//// compute the average value of the dataset, i.e. sum_of_dataset_values / num_of_dataset_values
 	float avg = average(v, size);
 	//	// find the max value in the dataset
@@ -50,12 +56,17 @@ int mainFunc(int size, int buffSize)
 	//	// find the min value in the dataset
 	int min = minvalue(v, size);
 	//	//sort the dataset and copy it into the memory area pointed by sds
+	
+	int tsort = prof->startTest();
 
 	sortDataset(v, size, buffSize);
+	prof->stopTest(tsort);
 	//insertionSort(v, DataSetSize);
 	////write the sorted array into a new file plus the valies of the average, min and max as the first three records.
-	writeDataset(v, OutputFilename, DataSetSize, buffSize, avg, min, max);
 
+	int twrite = prof->startTest();
+	writeDataset(v, OutputFilename, DataSetSize, buffSize, avg, min, max);
+	prof->stopTest(twrite);
 
 	return 1;
 }
@@ -64,7 +75,7 @@ int mainFunc(int size, int buffSize)
 int loadDataset(int ds[], int size)
 {
 	std::ifstream fp;
-	std::string v[DataSetSize];
+	std::string *v = new std::string[DataSetSize];
 	//fopen_s(&fp, DatasetFilename, "r");
 	fp.open(DatasetFilename, std::ios::out);
 
