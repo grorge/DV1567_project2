@@ -25,15 +25,15 @@ struct test
 	test() : startTime(0) {};
 };
 
-int mainFunc(Profiler *prof, int size, int buffSize);
+int mainFunc(Profiler *prof, int size, int buffSize, int sort);
 
 int loadDataset(int ds[], int size);
 void swap(int *xp, int *yp);
-void sortDataset(int arr[], int n, int m);
+void sortDataset(int arr[], int n, int m, int sort);
 void selectionSort(int arr[], int n);
 void insertionSort(int arr[], int n);
 
-int writeDataset(int ds[], const char *filename, int n, int Buffersize, float avg, int min, int max);
+int writeDataset(int ds[], const char *filename, int n, int Buffersize, float avg, int min, int max, int sort);
 
 float generateRand(int rmax);
 
@@ -52,6 +52,8 @@ public:
 	int startTest();
 
 	void stopTest(int testNr);
+
+	void print(std::string str);
 
 private:
 	std::ofstream proFile;
@@ -94,3 +96,10 @@ inline void Profiler::stopTest(int testNr)
 	proFile << "Runtime: " << runtime << "msec" << std::endl;
 	
 }
+
+inline void Profiler::print(std::string str)
+{
+	proFile << "Printing: " << str << std::endl;
+
+}
+

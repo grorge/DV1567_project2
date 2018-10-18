@@ -3,7 +3,10 @@
 
 
 //this code is an example of how to read a file in C
-
+int compare(const void * a, const void * b)
+	{
+		return (*(int*)a - *(int*)b);
+	}
 
 int main()
 {
@@ -19,16 +22,30 @@ int main()
 		std::cout << i << std::endl;
 	}
 
-	writeDataset(v, DatasetFilename, DataSetSize, DataSetSize, 0, 0, 0);
+	writeDataset(v, DatasetFilename, DataSetSize, DataSetSize, 0, 0, 0, 1);
 
 
 	int dataSize = DataSetSize / 4;
+
+	prof->print("Insertion Sort:");
 
 	for (int i = 1; i <= 4; i++)
 	{
 		int t0 = prof->startTest();
 
-		mainFunc(prof, dataSize * i, BufferSize /*DataSetSize/8*/);
+		mainFunc(prof, dataSize * i, BufferSize, 1	);
+
+		prof->stopTest(t0);
+	}
+
+	prof->print("-----------------");
+	prof->print("Quick Sort:");
+
+	for (int i = 1; i <= 4; i++)
+	{
+		int t0 = prof->startTest();
+
+		mainFunc(prof, dataSize * i, BufferSize, 2);
 
 		prof->stopTest(t0);
 	}
@@ -38,7 +55,7 @@ int main()
 	return 0;
 }
 
-int mainFunc(Profiler *prof, int size, int buffSize)
+int mainFunc(Profiler *prof, int size, int buffSize, int sort)
 {
 	int *v = new int[DataSetSize];
 
@@ -59,13 +76,13 @@ int mainFunc(Profiler *prof, int size, int buffSize)
 	
 	int tsort = prof->startTest();
 
-	sortDataset(v, size, buffSize);
+	sortDataset(v, size, buffSize, sort);
 	prof->stopTest(tsort);
 	//insertionSort(v, DataSetSize);
 	////write the sorted array into a new file plus the valies of the average, min and max as the first three records.
 
 	int twrite = prof->startTest();
-	writeDataset(v, OutputFilename, DataSetSize, buffSize, avg, min, max);
+	writeDataset(v, OutputFilename, DataSetSize, buffSize, avg, min, max, sort);
 	prof->stopTest(twrite);
 
 	return 1;
@@ -105,10 +122,18 @@ void swap(int *xp, int *yp)
 	*xp = *yp;
 	*yp = temp;
 }
-void sortDataset(int arr[], int n, int m)
+
+int compareA(const void * a, const void * b)
+{
+	return (*(int*)a - *(int*)b);
+}
+
+void sortDataset(int arr[], int n, int m, int sort)
 {
 	int *partionDS = new int[m];
 	int itterations = n / m;
+
+	
 
 	for (int j = 0; j < itterations; j++)
 	{
@@ -117,7 +142,15 @@ void sortDataset(int arr[], int n, int m)
 			partionDS[i] = arr[i + (j*m)];
 		}
 
-		insertionSort(partionDS, m);
+		if (sort == 1)
+		{
+			insertionSort(partionDS, m);
+		}
+		else
+		{
+			qsort(partionDS, m, sizeof(int), compareA);
+		}
+
 
 		for (int i = 0; i < m; i++)
 		{
@@ -125,11 +158,18 @@ void sortDataset(int arr[], int n, int m)
 		}
 	}
 
-
-	insertionSort(arr, n);
+	if (sort == 1)
+	{
+		insertionSort(arr, n);
+	}
+	else
+	{
+		qsort(arr, n, sizeof(int), compareA);
+	}
 
 	//delete partionDS;
 }
+
 void selectionSort(int arr[], int n)
 {
 	int i, j, min_idx;
@@ -164,31 +204,62 @@ void insertionSort(int arr[], int n)
 }
 
 
-int writeDataset(int ds[], const char *filename, int n, int Buffersize, float avg, int min, int max)
+int writeDataset(int ds[], const char *filename, int n, int Buffersize, float avg, int min, int max, int sort)
 {
-	std::ofstream fp;
-
-
-	fp.open(filename, std::ios::out);
-
-	int itterations = n / Buffersize;
-
-	for (int j = 0; j < itterations; j++)
+	if (sort == 2)
 	{
-		int i;
-		for (i = 0; i < Buffersize; i++)
-			{
-				fp << ds[i+(j*Buffersize)] << std::endl;
-			}
-		//int k = 1322;
-	}
+		std::ofstream fp;
 
-	fp << Buffersize << std::endl;
-	fp << avg << std::endl;
-	fp << min << std::endl;
-	fp << max;
-	// TIP you can define you own buffer, buffer size and you can write blocks of data of size > 1
-	fp.close();
+		fp.open(filename, std::ios::out);
+
+		int itterations = n / Buffersize;
+
+		for (int j = 0; j < itterations; j++)
+		{
+			int i;
+			for (i = 0; i < Buffersize; i += 4)
+			{
+				fp << ds[i + (j*Buffersize)] << "\n";
+				fp << ds[i+1 + (j*Buffersize)] << "\n";
+				fp << ds[i+2 + (j*Buffersize)] << "\n";
+				fp << ds[i+3 + (j*Buffersize)] << "\n";
+			}
+			//int k = 1322;
+		}
+
+		fp << Buffersize << "\n";
+		fp << avg << "\n";
+		fp << min << "\n";
+		fp << max;
+		// TIP you can define you own buffer, buffer size and you can write blocks of data of size > 1
+		fp.close();
+
+	}
+	else
+	{
+		std::ofstream fp;
+
+		fp.open(filename, std::ios::out);
+
+		int itterations = n / Buffersize;
+
+		for (int j = 0; j < itterations; j++)
+		{
+			int i;
+			for (i = 0; i < Buffersize; i++)
+			{
+				fp << ds[i + (j*Buffersize)] << std::endl;
+			}
+			//int k = 1322;
+		}
+
+		fp << Buffersize << std::endl;
+		fp << avg << std::endl;
+		fp << min << std::endl;
+		fp << max;
+		// TIP you can define you own buffer, buffer size and you can write blocks of data of size > 1
+		fp.close();
+	}
 
 
 	return 0;

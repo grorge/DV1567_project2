@@ -1,32 +1,67 @@
+Printing: Insertion Sort:
 Test number: 1
-Runtime: 23msec
+Runtime: 22msec
 Test number: 2
 Runtime: 11msec
 Test number: 3
-Runtime: 175msec
+Runtime: 172msec
 Test number: 0
-Runtime: 209msec
+Runtime: 206msec
 Test number: 5
-Runtime: 30msec
+Runtime: 31msec
 Test number: 6
-Runtime: 43msec
+Runtime: 45msec
 Test number: 7
-Runtime: 173msec
+Runtime: 169msec
 Test number: 4
-Runtime: 248msec
+Runtime: 245msec
 Test number: 9
-Runtime: 38msec
+Runtime: 41msec
 Test number: 10
-Runtime: 103msec
+Runtime: 105msec
 Test number: 11
-Runtime: 150msec
+Runtime: 159msec
 Test number: 8
-Runtime: 291msec
+Runtime: 305msec
 Test number: 13
-Runtime: 48msec
+Runtime: 52msec
 Test number: 14
-Runtime: 189msec
+Runtime: 195msec
 Test number: 15
-Runtime: 191msec
+Runtime: 160msec
 Test number: 12
-Runtime: 428msec
+Runtime: 408msec
+Printing: -----------------
+Printing: Quick Sort:
+Test number: 17
+Runtime: 23msec
+Test number: 18
+Runtime: 2msec
+Test number: 19
+Runtime: 74msec
+Test number: 16
+Runtime: 99msec
+Test number: 21
+Runtime: 32msec
+Test number: 22
+Runtime: 4msec
+Test number: 23
+Runtime: 64msec
+Test number: 20
+Runtime: 100msec
+Test number: 25
+Runtime: 40msec
+Test number: 26
+Runtime: 8msec
+Test number: 27
+Runtime: 77msec
+Test number: 24
+Runtime: 125msec
+Test number: 29
+Runtime: 50msec
+Test number: 30
+Runtime: 9msec
+Test number: 31
+Runtime: 57msec
+Test number: 28
+Runtime: 117msec
